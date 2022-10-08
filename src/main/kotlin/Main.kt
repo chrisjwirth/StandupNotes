@@ -1,7 +1,15 @@
-fun main(args: Array<String>) {
-    println("Hello World!")
+import menus.main.mainMenu
+import kotlin.system.exitProcess
 
-    // Try adding program arguments via Run/Debug configuration.
-    // Learn more about running applications: https://www.jetbrains.com/help/idea/running-applications.html.
-    println("Program arguments: ${args.joinToString()}")
+fun main() {
+    printOpeningMessage()
+    mainMenu()
+    exitProcess(0)
+}
+
+fun printOpeningMessage() {
+    println()
+    println("-----------------------------------------------")
+    println("                 STANDUP NOTES                 ")
+    println("-----------------------------------------------")
 }
