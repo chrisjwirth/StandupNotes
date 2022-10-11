@@ -1,18 +1,18 @@
 package menus.help
 
 enum class HelpMenuChoice {
-    SET,
-    GET,
-    EXIT,
-    INVALID;
+    Set,
+    Get,
+    Exit,
+    Invalid;
 
     companion object {
         fun aliasOf(value: String): HelpMenuChoice {
             return when(value.lowercase()) {
-                "s", "set" -> SET
-                "g", "get" -> GET
-                "e", "exit" -> EXIT
-                else -> INVALID
+                "s", "set" -> Set
+                "g", "get" -> Get
+                "e", "exit" -> Exit
+                else -> Invalid
             }
         }
     }
