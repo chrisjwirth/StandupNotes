@@ -1,21 +1,23 @@
-import config.Config
-import menus.main.mainMenu
-import notes.setDailyNote
+import config.ConfigManager
+import menus.MainMenu
+import notes.DailyNoteSetter.setDailyNote
 import kotlin.system.exitProcess
 
 fun main() {
-    printOpeningMessage()
+    printApplicationTitle()
 
-    if (Config.userConfig.dailyNoteMode) setDailyNote()
+    if (ConfigManager.userConfig.dailyNoteMode) setDailyNote()
 
-    mainMenu()
+    MainMenu.launch()
 
     exitProcess(0)
 }
 
-fun printOpeningMessage() {
+fun printApplicationTitle() {
     println()
-    println("---------------------------------------------------------")
-    println("                      STANDUP NOTES                      ")
-    println("---------------------------------------------------------")
+    println("""
+        ---------------------------------------------------------
+                              STANDUP NOTES                      
+        ---------------------------------------------------------
+    """.trimIndent())
 }
