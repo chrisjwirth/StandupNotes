@@ -1,12 +1,10 @@
 Getting Standup Notes------------------------------------
-This
-help
-document
-will
-provide
-information
-on
-getting
-standup
-notes
+1. To get your daily standup notes, enter either 'g' or
+   'get' from the main menu (case-insensitive).
+2. Your daily standup notes will automatically be
+   retrieved for the configured format.
+   - Guided (default): Provides prompts to aligned with
+     traditional standup meetings.
+   - Freeform: Provides a single unprompted note
+     opportunity.
 ---------------------------------------------------------

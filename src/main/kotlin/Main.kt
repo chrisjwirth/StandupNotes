@@ -6,7 +6,7 @@ import kotlin.system.exitProcess
 fun main() {
     printApplicationTitle()
 
-    if (ConfigManager.userConfig.dailyNoteMode) setDailyNote()
+    if (ConfigManager.userConfig.dailyMode) setDailyNote()
 
     MainMenu.launch()
 

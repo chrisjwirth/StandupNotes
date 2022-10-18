@@ -6,8 +6,8 @@ import storage.StorageManager.StorageFile
 
 object ConfigManager {
     data class UserConfig(
-        val freeformNoteMethod: Boolean,
-        val dailyNoteMode: Boolean
+        val freeformFormat: Boolean,
+        val dailyMode: Boolean
     )
 
     private val userConfigFile = getStorageFile(StorageFile.UserConfig)
@@ -16,11 +16,34 @@ object ConfigManager {
     fun setConfig() {
         printSetConfigMessage()
 
-        println("Would you like to use the freeform note method?")
+        println()
+        println("""
+            **Freeform Note Format**
+            
+            This format provides a single unprompted note
+            opportunity.
+            
+            Enabling this format will disable the guided note
+            prompts (enabled by default).
+
+            Would you like to enable the freeform note format?
+        """.trimIndent())
         print("> ")
         val guidedNoteMethod = enableConfigOption()
 
-        println("Would you like StandupNotes to open in daily note mode?")
+        println()
+        println("""
+            **Daily Note Mode**
+            This mode causes the application to initially bypass 
+            the main menu, allowing you to more quickly set your
+            daily standup note.
+            
+            Enabling this mode will require you to enter your 
+            daily standup note (or exit without saving) to access
+            the main menu.
+           
+            Would you like to enable the daily note mode?
+        """.trimIndent())
         print("> ")
         val dailyNoteMode = enableConfigOption()
 
@@ -43,8 +66,6 @@ object ConfigManager {
         println("""
             Configure Application------------------------------------
             Enter 'y' or 'n' to set each of the following options.
-            Enter 'h' or 'help' to get more info about an option.
         """.trimIndent())
-        println()
     }
 }

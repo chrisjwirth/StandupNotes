@@ -1,12 +1,13 @@
 Setting Standup Notes------------------------------------
-This
-help
-document
-will
-provide
-information
-on
-setting
-standup
-notes
+1. To set your daily standup notes, enter either 's'
+   or 'set' from the main menu (case-insensitive).
+2. On the screen that appears, you will be able to enter
+   your daily standup note in the configured format.
+   - Guided (default): Provides prompts to aligned with
+     traditional standup meetings.
+   - Freeform: Provides a single unprompted note
+     opportunity.
+3. To change the note format, enter either 'c' or
+   'config' from the main menu (case-insensitive) and
+   follow the prompts therein.
 ---------------------------------------------------------

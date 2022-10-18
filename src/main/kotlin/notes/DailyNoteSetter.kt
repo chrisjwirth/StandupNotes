@@ -1,16 +1,17 @@
 package notes
 
 import config.ConfigManager
-import storage.StorageManager.getStorageFile
 import storage.StorageManager.StorageFile
+import storage.StorageManager.getStorageFile
 import utils.UserRequestedExitException
 import utils.userRequestedExit
+import java.util.*
 
 object DailyNoteSetter {
     fun setDailyNote() {
         printSetDailyNoteMessage()
 
-        if (ConfigManager.userConfig.freeformNoteMethod) {
+        if (ConfigManager.userConfig.freeformFormat) {
             setDailyNoteFreeformMethod()
         } else {
             setDailyNoteGuidedMethod()
@@ -21,7 +22,7 @@ object DailyNoteSetter {
         val freeformNote: String
 
         try {
-            freeformNote = getAndValidateNote("Type your standup note and press 'Enter' to save.")
+            freeformNote = getAndValidateNote("What is your freeform standup note?")
         } catch (e: UserRequestedExitException) {
             return
         }
@@ -48,14 +49,19 @@ object DailyNoteSetter {
     }
 
     private fun getAndValidateNote(message: String): String {
+        val scanner = Scanner(System.`in`)
+        val note = StringBuilder()
+
         println(message)
-        print("> ")
 
-        val note = readln()
+        while (true) {
+            val line = scanner.nextLine()
+            if (line.isEmpty()) break
+            if (userRequestedExit(line)) throw UserRequestedExitException()
+            note.append("$line \n")
+        }
 
-        if (userRequestedExit(note)) throw UserRequestedExitException()
-
-        return note
+        return note.toString()
     }
 
     private fun writeValidatedNoteToFile(note: String, storageFile: StorageFile) {
@@ -64,10 +70,13 @@ object DailyNoteSetter {
 
     private fun printSetDailyNoteMessage() {
         println()
-        println("""
+        println(
+            """
             Set Daily Standup Note-----------------------------------
+            Enter a blank line to save.
             Enter 'exit' to leave without saving.
-        """.trimIndent())
+        """.trimIndent()
+        )
         println()
     }
 }

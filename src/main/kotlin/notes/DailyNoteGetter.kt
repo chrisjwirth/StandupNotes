@@ -8,7 +8,7 @@ object DailyNoteGetter {
     fun getDailyNote() {
         printGetDailyNoteMessage()
 
-        if (ConfigManager.userConfig.freeformNoteMethod) {
+        if (ConfigManager.userConfig.freeformFormat) {
             getDailyNoteFreeformMethod()
         } else {
             getDailyNoteGuidedMethod()
