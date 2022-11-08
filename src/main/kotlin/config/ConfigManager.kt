@@ -7,17 +7,20 @@ import storage.StorageManager.StorageFile
 object ConfigManager {
     data class UserConfig(
         val freeformFormat: Boolean,
-        val dailyMode: Boolean
+        val dailyMode: Boolean,
+        val ticketTextExpansion: Boolean,
+        val jiraPrefix: String?,
+        val jiraProject: String?
     )
 
     private val userConfigFile = getStorageFile(StorageFile.UserConfig)
     var userConfig: UserConfig = Gson().fromJson(userConfigFile.readText(), UserConfig::class.java)
 
-    fun setConfig() {
-        printSetConfigMessage()
-
-        println()
-        println("""
+    private val setConfigMessage = """
+            Configure Application------------------------------------
+            Enter 'y' or 'n' to set each of the following options.
+        """.trimIndent()
+    private val freeformFormatMessage = """
             **Freeform Note Format**
             
             This format provides a single unprompted note
@@ -27,12 +30,8 @@ object ConfigManager {
             prompts (enabled by default).
 
             Would you like to enable the freeform note format?
-        """.trimIndent())
-        print("> ")
-        val guidedNoteMethod = enableConfigOption()
-
-        println()
-        println("""
+        """.trimIndent()
+    private val dailyModeMessage = """
             **Daily Note Mode**
             This mode causes the application to initially bypass 
             the main menu, allowing you to more quickly set your
@@ -43,17 +42,41 @@ object ConfigManager {
             the main menu.
            
             Would you like to enable the daily note mode?
-        """.trimIndent())
-        print("> ")
-        val dailyNoteMode = enableConfigOption()
+        """.trimIndent()
+    private val ticketTextExpansionMessage = """
+            **Ticket Text Expansion**
+        """.trimIndent()
+    private val jiraPrefixMessage = """
+            **JIRA Ticket Prefix**
+        """.trimIndent()
+    private val jiraProjectMessage = """
+            **JIRA Project Prefix**
+        """.trimIndent()
 
-        userConfig = UserConfig(guidedNoteMethod, dailyNoteMode)
+    fun setConfig() {
+        printMessage(setConfigMessage)
+
+        val freeformFormat = enableConfigOption(freeformFormatMessage)
+        val dailyNoteMode = enableConfigOption(dailyModeMessage)
+        val ticketTextExpansion = enableConfigOption(ticketTextExpansionMessage)
+        val jiraPrefix = if (ticketTextExpansion) getConfigData(jiraPrefixMessage) else null
+        val jiraProject = if (ticketTextExpansion) getConfigData(jiraProjectMessage) else null
+
+        userConfig = UserConfig(
+            freeformFormat,
+            dailyNoteMode,
+            ticketTextExpansion,
+            jiraPrefix,
+            jiraProject
+        )
         userConfigFile.writeText(Gson().toJson(userConfig, UserConfig::class.java))
     }
 
-    private fun enableConfigOption(): Boolean {
+    private fun enableConfigOption(message: String): Boolean {
+        printMessage(message)
+        print("> ")
         while (true) {
-            when (readln().lowercase()) {
+            when (readln()) {
                 "y" -> return true
                 "n" -> return false
                 else -> println("Invalid choice. Please enter 'y' or 'n'.")
@@ -61,11 +84,17 @@ object ConfigManager {
         }
     }
 
-    private fun printSetConfigMessage() {
+    private fun getConfigData(message: String): String {
+        printMessage(message)
+        print("> ")
+        while (true) {
+            val option = readln()
+            if (option.isNotEmpty()) return option
+        }
+    }
+
+    private fun printMessage(message: String) {
         println()
-        println("""
-            Configure Application------------------------------------
-            Enter 'y' or 'n' to set each of the following options.
-        """.trimIndent())
+        println(message)
     }
 }

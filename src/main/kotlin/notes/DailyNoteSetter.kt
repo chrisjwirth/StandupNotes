@@ -4,6 +4,7 @@ import config.ConfigManager
 import storage.StorageManager.StorageFile
 import storage.StorageManager.getStorageFile
 import utils.UserRequestedExitException
+import utils.getExpandedTicket
 import utils.userRequestedExit
 import java.util.*
 
@@ -65,7 +66,18 @@ object DailyNoteSetter {
     }
 
     private fun writeValidatedNoteToFile(note: String, storageFile: StorageFile) {
-        getStorageFile(storageFile).writeText(note)
+        val noteToWrite = if (ConfigManager.userConfig.ticketTextExpansion) {
+            noteWithExpandedTickets(note)
+        } else {
+            note
+        }
+
+        getStorageFile(storageFile).writeText(noteToWrite)
+    }
+
+    private fun noteWithExpandedTickets(note: String): String {
+        val ticketsToExpand = "@{2}\\d+".toRegex()
+        return ticketsToExpand.replace(note) { getExpandedTicket(it.value) }
     }
 
     private fun printSetDailyNoteMessage() {

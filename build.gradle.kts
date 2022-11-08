@@ -13,7 +13,9 @@ repositories {
 }
 
 dependencies {
-    implementation("com.google.code.gson:gson:2.9.0")
+    implementation("io.ktor:ktor-client-core:2.1.3")
+    implementation("io.ktor:ktor-client-cio:2.1.3")
+    implementation("com.google.code.gson:gson:2.10")
     testImplementation(kotlin("test"))
 }
 
