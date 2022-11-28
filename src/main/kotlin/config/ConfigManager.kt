@@ -1,8 +1,8 @@
 package config
 
 import com.google.gson.Gson
-import storage.StorageManager.getStorageFile
 import storage.StorageManager.StorageFile
+import storage.StorageManager.getStorageFile
 
 object ConfigManager {
     data class UserConfig(
@@ -48,7 +48,7 @@ object ConfigManager {
             Ticket text expansion provides a streamlined way to 
             add the URL of your JIRA tickets to your daily 
             standup notes. When enabled and configured, the prefix 
-            "@@" followed by your JIRA ticket number will be 
+            '@@' followed by your JIRA ticket number will be 
             replaced with the URL of that ticket.
             
             Would you like to enable ticket text expansion?
@@ -56,21 +56,21 @@ object ConfigManager {
     private val jiraPrefixMessage = """
             **JIRA Ticket Prefix**
             The JIRA ticket prefix is the part of the URL before 
-            "atlassian.net". For example, for the following ticket 
-            URL, the ticket prefix is "chrisjwirth". This is 
+            'atlassian.net'. For example, for the following ticket 
+            URL, the ticket prefix is 'chrisjwirth'. This is 
             required for ticket text expansion to function.
             
-            "https://chrisjwirth.atlassian.net/browse/STANDUP-1"
+            'https://chrisjwirth.atlassian.net/browse/STANDUP-1'
             
             What is your JIRA ticket prefix?
         """.trimIndent()
     private val jiraProjectMessage = """
             **JIRA Project Prefix**
             The JIRA project is the part of the URL after 
-            "atlassian.net/browse/". For example, for the following 
-            ticket URL, the JIRA prefix is "STANDUP".
+            'atlassian.net/browse/'. For example, for the following 
+            ticket URL, the JIRA prefix is 'STANDUP'.
             
-            "https://chrisjwirth.atlassian.net/browse/STANDUP-1"
+            'https://chrisjwirth.atlassian.net/browse/STANDUP-1'
             
             What is your JIRA project?
         """.trimIndent()
@@ -84,13 +84,7 @@ object ConfigManager {
         val jiraPrefix = if (ticketTextExpansion) getConfigData(jiraPrefixMessage) else null
         val jiraProject = if (ticketTextExpansion) getConfigData(jiraProjectMessage) else null
 
-        userConfig = UserConfig(
-            freeformFormat,
-            dailyNoteMode,
-            ticketTextExpansion,
-            jiraPrefix,
-            jiraProject
-        )
+        userConfig = UserConfig(freeformFormat, dailyNoteMode, ticketTextExpansion, jiraPrefix, jiraProject)
         userConfigFile.writeText(Gson().toJson(userConfig, UserConfig::class.java))
     }
 

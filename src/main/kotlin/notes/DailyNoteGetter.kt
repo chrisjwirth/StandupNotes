@@ -1,35 +1,24 @@
 package notes
 
-import config.ConfigManager
-import storage.StorageManager.getStorageFile
 import storage.StorageManager.StorageFile
+import storage.StorageManager.getStorageFile
+import utils.getDateToday
+import java.io.FileNotFoundException
 
 object DailyNoteGetter {
+    private val dateToday = getDateToday()
+
     fun getDailyNote() {
         printGetDailyNoteMessage()
 
-        if (ConfigManager.userConfig.freeformFormat) {
-            getDailyNoteFreeformMethod()
-        } else {
-            getDailyNoteGuidedMethod()
+        try {
+            println(getStorageFile(StorageFile.StandupNote, dateToday).readText())
+        } catch (e: FileNotFoundException) {
+            println("You do not have a standup note for today.")
+            return
         }
 
         readln()  // Wait for user to enter key before returning
-    }
-
-    private fun getDailyNoteFreeformMethod() {
-        printNoteFromFile("Your standup notes:", StorageFile.Freeform)
-    }
-
-    private fun getDailyNoteGuidedMethod() {
-        printNoteFromFile("The work you completed yesterday:", StorageFile.Yesterday)
-        printNoteFromFile("The work you are planning on doing today:", StorageFile.Today)
-        printNoteFromFile("The work you need your team's help with:", StorageFile.HelpRequest)
-    }
-
-    private fun printNoteFromFile(message: String, storageFile: StorageFile) {
-        println(message)
-        println(getStorageFile(storageFile).readText())
     }
 
     private fun printGetDailyNoteMessage() {

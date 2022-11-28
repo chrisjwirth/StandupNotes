@@ -4,13 +4,19 @@ import config.ConfigManager
 import storage.StorageManager.StorageFile
 import storage.StorageManager.getStorageFile
 import utils.UserRequestedExitException
+import utils.getDateToday
 import utils.getExpandedTicket
 import utils.userRequestedExit
+import java.io.FileNotFoundException
 import java.util.*
 
 object DailyNoteSetter {
+    private val dateToday = getDateToday()
+
     fun setDailyNote() {
         printSetDailyNoteMessage()
+
+        displayExistingNoteIfExists()
 
         if (ConfigManager.userConfig.freeformFormat) {
             setDailyNoteFreeformMethod()
@@ -20,33 +26,25 @@ object DailyNoteSetter {
     }
 
     private fun setDailyNoteFreeformMethod() {
-        val freeformNote: String
-
         try {
-            freeformNote = getAndValidateNote("What is your freeform standup note?")
-        } catch (e: UserRequestedExitException) {
-            return
-        }
-
-        writeValidatedNoteToFile(freeformNote, StorageFile.Freeform)
+            writeValidatedNoteToFile("""
+                Your standup notes:
+                ${getAndValidateNote("What is your freeform standup note?")}
+            """.trimIndent())
+        } catch (e: UserRequestedExitException) { return }
     }
 
     private fun setDailyNoteGuidedMethod() {
-        val yesterdayNote: String
-        val todayNote: String
-        val helpRequestNote: String
-
         try {
-            yesterdayNote = getAndValidateNote("What did you do yesterday?")
-            todayNote = getAndValidateNote("What are you planning on doing today?")
-            helpRequestNote = getAndValidateNote("What do you need your team's help with?")
-        } catch (e: UserRequestedExitException) {
-            return
-        }
-
-        writeValidatedNoteToFile(yesterdayNote, StorageFile.Yesterday)
-        writeValidatedNoteToFile(todayNote, StorageFile.Today)
-        writeValidatedNoteToFile(helpRequestNote, StorageFile.HelpRequest)
+            writeValidatedNoteToFile("""
+                The work you completed yesterday:
+                ${getAndValidateNote("What did you do yesterday?")}
+                The work you are planning on doing today:
+                ${getAndValidateNote("What are you planning on doing today?")}
+                The work you need your team's help with:
+                ${getAndValidateNote("What do you need your team's help with?")}
+            """.trimIndent())
+        } catch (e: UserRequestedExitException) { return }
     }
 
     private fun getAndValidateNote(message: String): String {
@@ -65,14 +63,14 @@ object DailyNoteSetter {
         return note.toString()
     }
 
-    private fun writeValidatedNoteToFile(note: String, storageFile: StorageFile) {
+    private fun writeValidatedNoteToFile(note: String) {
         val noteToWrite = if (ConfigManager.userConfig.ticketTextExpansion) {
             noteWithExpandedTickets(note)
         } else {
             note
         }
 
-        getStorageFile(storageFile).writeText(noteToWrite)
+        getStorageFile(StorageFile.StandupNote, dateToday).writeText(noteToWrite)
     }
 
     private fun noteWithExpandedTickets(note: String): String {
@@ -80,15 +78,26 @@ object DailyNoteSetter {
         return ticketsToExpand.replace(note) { getExpandedTicket(it.value) }
     }
 
+    private fun displayExistingNoteIfExists() {
+        try {
+            val existingDailyStandupNote = getStorageFile(StorageFile.StandupNote, dateToday).readText()
+            println("""
+                You already have the following standup note for today.
+                To edit today's standup note, enter the new note below.
+            """.trimIndent())
+            println("Existing Standup Note------------------------------------")
+            println(existingDailyStandupNote)
+            println("---------------------------------------------------------")
+        } catch (e: FileNotFoundException) { return }
+    }
+
     private fun printSetDailyNoteMessage() {
         println()
-        println(
-            """
+        println("""
             Set Daily Standup Note-----------------------------------
             Enter a blank line to save.
             Enter 'exit' to leave without saving.
-        """.trimIndent()
-        )
+        """.trimIndent())
         println()
     }
 }

@@ -1,7 +1,7 @@
 package menus
 
-import storage.StorageManager.getStorageFile
 import storage.StorageManager.StorageFile
+import storage.StorageManager.getStorageFile
 
 object HelpMenu {
     enum class HelpMenuChoice {
