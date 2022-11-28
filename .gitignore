@@ -42,4 +42,4 @@ bin/
 .DS_Store
 
 ### Project Specific ###
-/storage/files/notes/*
+/src/main/kotlin/storage/files/notes/*
