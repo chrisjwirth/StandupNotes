@@ -45,12 +45,34 @@ object ConfigManager {
         """.trimIndent()
     private val ticketTextExpansionMessage = """
             **Ticket Text Expansion**
+            Ticket text expansion provides a streamlined way to 
+            add the URL of your JIRA tickets to your daily 
+            standup notes. When enabled and configured, the prefix 
+            "@@" followed by your JIRA ticket number will be 
+            replaced with the URL of that ticket.
+            
+            Would you like to enable ticket text expansion?
         """.trimIndent()
     private val jiraPrefixMessage = """
             **JIRA Ticket Prefix**
+            The JIRA ticket prefix is the part of the URL before 
+            "atlassian.net". For example, for the following ticket 
+            URL, the ticket prefix is "chrisjwirth". This is 
+            required for ticket text expansion to function.
+            
+            "https://chrisjwirth.atlassian.net/browse/STANDUP-1"
+            
+            What is your JIRA ticket prefix?
         """.trimIndent()
     private val jiraProjectMessage = """
             **JIRA Project Prefix**
+            The JIRA project is the part of the URL after 
+            "atlassian.net/browse/". For example, for the following 
+            ticket URL, the JIRA prefix is "STANDUP".
+            
+            "https://chrisjwirth.atlassian.net/browse/STANDUP-1"
+            
+            What is your JIRA project?
         """.trimIndent()
 
     fun setConfig() {
