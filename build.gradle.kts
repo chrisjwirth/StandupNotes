@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.7.20"
+    kotlin("jvm") version "1.8.0"
     application
 }
 
@@ -15,7 +15,7 @@ repositories {
 dependencies {
     implementation("io.ktor:ktor-client-core:2.1.3")
     implementation("io.ktor:ktor-client-cio:2.1.3")
-    implementation("com.google.code.gson:gson:2.10")
+    implementation("com.google.code.gson:gson:2.10.1")
     testImplementation(kotlin("test"))
 }
 
