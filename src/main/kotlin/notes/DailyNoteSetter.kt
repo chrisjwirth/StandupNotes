@@ -5,7 +5,6 @@ import storage.StorageManager.StorageFile
 import storage.StorageManager.getStorageFile
 import utils.UserRequestedExitException
 import utils.getDateToday
-import utils.getExpandedTicket
 import utils.userRequestedExit
 import java.io.FileNotFoundException
 import java.util.*
@@ -64,18 +63,7 @@ object DailyNoteSetter {
     }
 
     private fun writeValidatedNoteToFile(note: String) {
-        val noteToWrite = if (ConfigManager.userConfig.ticketTextExpansion) {
-            noteWithExpandedTickets(note)
-        } else {
-            note
-        }
-
-        getStorageFile(StorageFile.StandupNote, dateToday).writeText(noteToWrite)
-    }
-
-    private fun noteWithExpandedTickets(note: String): String {
-        val ticketsToExpand = "@{2}\\d+".toRegex()
-        return ticketsToExpand.replace(note) { getExpandedTicket(it.value) }
+        getStorageFile(StorageFile.StandupNote, dateToday).writeText(note)
     }
 
     private fun displayExistingNoteIfExists() {
